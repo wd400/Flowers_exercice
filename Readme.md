@@ -31,7 +31,7 @@ The Angular UI will be available at http://localhost:4000
 ## Built With
 
 - [Flask](https://flask.palletsprojects.com/en/2.0.x/) - The web framework used for the backend API.
-- [Angular](https://angular.io/) - The web framework used for the frontend UI, V17.
+- [Angular](https://angular.io/) - The web framework used for the frontend UI, V18.
 - [Docker](https://www.docker.com/) - Used for containerization and deployment.
 - [Docker Compose](https://docs.docker.com/compose/) - Used for defining and running multi-container Docker applications.
 
