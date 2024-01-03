@@ -9,6 +9,7 @@ from pydantic import BaseModel, ValidationError, field_validator, validator
 from exceptions import ModelNotTrainedException
 from typing import Dict, Union
 from model import train_model, predict
+from typing import List
 
 import logging
 logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s %(message)s')
@@ -27,11 +28,13 @@ else:
     db = TinyDB('db.json')
 
 class DBEntry(BaseModel):
+    """A DB entry"""
     x: float
     y: float
 
 @app.route('/add', methods=['POST'])
 def add_route() -> Dict[str, str]:
+    """Add a new entry to the database"""
     global db
     try:
         db_entry = DBEntry.model_validate_json(request.data)
@@ -45,23 +48,15 @@ def add_route() -> Dict[str, str]:
 
 
 class ListRequest(BaseModel):
+    """A request to list the database"""
     page: int = 1
 
-    # @field_validator('page')
-    # def page_validator(cls, v):
-        
-    #     if not v.isdigit():
-    #         raise ValueError('Page must be a number')
-    #     if int(v) < 1:
-    #         raise ValueError('Page must be greater than 0')
-        
-    #     print(v, file=sys.stderr)
-    #     return int(v)
 
-from typing import List
+
 
 @app.route('/list', methods=['GET'])
 def list_route() -> Union[List[Dict[str, float]], Dict[str, str]]:
+    """List the database"""
     global db
 
     try:
@@ -81,6 +76,7 @@ from threading import Lock, Thread
 test_loss_value = None
 
 def train_model_thread():
+    """Train the model in a separate thread and save the test loss to a file"""
     with app.app_context():
         global test_loss_value
         examples = db.all()
@@ -100,6 +96,7 @@ training_lock = Lock()
 
 @app.route('/train', methods=['GET'])
 def train_route() -> Dict[str, str]:
+    """Train the model"""
     if training_lock.locked():
         return {'status': 'Training in progress'}
     else:
@@ -115,8 +112,7 @@ class PredictRequest(BaseModel):
 
 @app.route('/predict', methods=['POST'])
 def predict_route() -> Dict[str, Union[float, str]]:
-
-
+    """Predict the value of y for a given x with the trained model"""
     try:
         predict_request = PredictRequest.model_validate_json(request.data)
     except ValidationError as e:
@@ -137,6 +133,7 @@ if os.path.exists('test_loss.txt'):
 
 @app.route('/test_loss', methods=['GET'])
 def test_loss_route() -> Dict[str, Union[float, str]]:
+    """Get the test loss"""
     global test_loss_value
     if test_loss_value is not None:
         return {'loss': test_loss_value}

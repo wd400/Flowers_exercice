@@ -16,6 +16,9 @@ tensorboard = TensorBoard(log_dir='./logs', histogram_freq=0, write_graph=True, 
 
 
 def create_model() -> Sequential:
+    """Create a new model
+    :return: the created model
+    """
     model = Sequential()
     model.add(Dense(1, input_dim=1, activation='relu'))
     model.add(Dense(32, activation='relu'))
@@ -27,6 +30,13 @@ def create_model() -> Sequential:
 
 
 def train_test_split(x: np.ndarray, y: np.ndarray, test_size=0.2, random_state=None) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Split the data into train and test sets
+    :param x: the input data
+    :param y: the output data
+    :param test_size: the size of the test set
+    :param random_state: the random state
+    :return: the train and test sets for x and y
+    """
     if random_state is not None:
         np.random.seed(random_state)
 
@@ -41,8 +51,16 @@ def train_test_split(x: np.ndarray, y: np.ndarray, test_size=0.2, random_state=N
 
 
 
+#docstring with input and output
 
 def train_model(x: np.ndarray, y: np.ndarray) -> float:
+    """Train the model with the given data and return the score
+    :param x: the input data
+    :param y: the output data
+    :return: the score of the model
+    """
+
+
     global current_model
 
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -63,6 +81,10 @@ def train_model(x: np.ndarray, y: np.ndarray) -> float:
 
 
 def predict(x : float) -> float:
+    """Predict the value of y for a given x with the trained model
+    :param x: the input value
+    :return: the predicted value of y
+    """
     global current_model
 
     if current_model is None:
