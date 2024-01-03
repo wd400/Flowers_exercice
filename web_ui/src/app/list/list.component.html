@@ -1,0 +1,8 @@
+<div *ngFor="let sample of samples"  (window:load)="changePage(1)">
+    x: {{ sample.x }}, y: {{ sample.y }}
+  </div>
+<button (click)="changePage(page - 1)" [disabled]="page === 1">Previous</button>
+<button (click)="changePage(page + 1)"
+
+
+[disabled]="samples.length < maxPage">Next</button>

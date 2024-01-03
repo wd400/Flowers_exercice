@@ -1,0 +1,24 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    volumes:
+      - ./api/app:/app/
+    # ports:
+    #   - "5000:5000" 
+    environment:
+      - PAGE_SIZE=${PAGE_SIZE:-10}
+    restart: always
+
+  web_ui:
+    build: ./web_ui
+    volumes:
+      - ./web_ui:/usr/src/app
+    ports:
+      - "4000:4000" 
+    depends_on:
+      - api
+    environment:
+      - PAGE_SIZE=${PAGE_SIZE:-10}
+    restart: always
+
